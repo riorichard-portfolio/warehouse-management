@@ -1,5 +1,6 @@
 import UserEntity from "./user.entity";
 
-export interface UserUsecase {
+export default interface UserUsecase {
     login(email: string, password: string): Promise<UserEntity>;
+    validateRegistration(email: string): Promise<string>; // return token for next registration
 }
