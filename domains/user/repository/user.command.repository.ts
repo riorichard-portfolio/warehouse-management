@@ -1,3 +1,3 @@
 export default interface UserCommandRepository {
-    bulkInsert(emails: string[], roles: string[], passwords: string[]): Promise<void>;
+    bulkInsert(users: { email: string; role: string; password: string }[]): Promise<void>;
 }
