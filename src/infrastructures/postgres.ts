@@ -4,7 +4,7 @@ import {
     SqlArrayRows,
     SqlDB,
     SqlStatement,
-} from './interfaces';
+} from '@/domains/.infrastructure/sql.db';
 
 export default class PostgreDatabase implements SqlDB {
     private pool: Pool;
