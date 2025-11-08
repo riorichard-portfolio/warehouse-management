@@ -17,14 +17,15 @@ export default class Characters implements Constant.NotNullCharacters, Constant.
     }
     public value(): string {
         if (this.nullValueNotVerified) throw new Error(errorNullNotVerified)
-        if (typeof this.stringData === 'string') {
-            return this.stringData
-        } else {
-            // if this triggered means value === null 
-            // means accessing null value not in condition isNotNull after verifying
-            // or still using it if it already verified null
-            throw new Error(errorNotProperNullVerifyUse)
-        }
+        try {
+            if (typeof this.stringData === 'string') {
+                return this.stringData
+            }
+        } catch (_) { }
+        // if this triggered means value === null 
+        // means accessing null value not in condition isNotNull after verifying
+        // or still using it if it already verified null
+        throw new Error(errorNotProperNullVerifyUse)
     }
     public isNotNull(): boolean {
         this.nullValueNotVerified = false
