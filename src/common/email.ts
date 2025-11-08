@@ -1,6 +1,6 @@
 import { OptEmail, Email } from "./primitive.abstractions/primitive.unique.abstraction";
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailRegex = /^(?!\.)(?!.*\.$)(?!.*\.\.)[a-zA-Z0-9!$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
 const errorInvalidTypeForEmail = "value in Email MUST be string"
@@ -15,6 +15,7 @@ export class NullableEmail implements OptEmail {
         if (typeof unknownData == 'string') {
             if (this.isEmailValid(unknownData)) {
                 this.email = unknownData
+                this.isEmailNull = false
             }
         }
     }
@@ -48,7 +49,7 @@ export class NotNullEmail implements Email {
     private readonly email: string
     constructor(stringData: string) {
         if (typeof stringData === 'string') {
-            if(this.isEmailValid(stringData)){
+            if (this.isEmailValid(stringData)) {
                 this.email = stringData
             } else {
                 throw new Error(errorStringIsNotAnEmail)
