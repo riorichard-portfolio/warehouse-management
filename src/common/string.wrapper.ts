@@ -1,7 +1,7 @@
 import Constant from '@/common/constants'
 
 const errorNullNotVerified = "isNull() must be called before value()"
-const errorNotProperNullVerifyUse = "data is null :isValidValue() must be used properly to avoid null"
+const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
 const errorInvalidTypeForString = "value in NotNullCharacters MUST be string"
 
 export class NullableCharacters implements Constant.NullableCharacters {
