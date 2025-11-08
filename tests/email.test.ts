@@ -238,11 +238,11 @@ describe('NotNullEmail', () => {
 
     // === REJECT INVALID INPUTS ===
     test('should throw on null input', () => {
-        expect(() => new NotNullEmail(null as any)).toThrow("value in Email MUST be string");
+        expect(() => new NotNullEmail(null as any)).toThrow("value in NotNullEmail MUST be string");
     });
 
     test('should throw on undefined input', () => {
-        expect(() => new NotNullEmail(undefined as any)).toThrow("value in Email MUST be string");
+        expect(() => new NotNullEmail(undefined as any)).toThrow("value in NotNullEmail MUST be string");
     });
 
     test('should throw on empty string', () => {
@@ -274,10 +274,10 @@ describe('NotNullEmail', () => {
     });
 
     test('should throw on non-string inputs', () => {
-        expect(() => new NotNullEmail(123 as any)).toThrow("value in Email MUST be string");
-        expect(() => new NotNullEmail(true as any)).toThrow("value in Email MUST be string");
-        expect(() => new NotNullEmail({} as any)).toThrow("value in Email MUST be string");
-        expect(() => new NotNullEmail([] as any)).toThrow("value in Email MUST be string");
+        expect(() => new NotNullEmail(123 as any)).toThrow("value in NotNullEmail MUST be string");
+        expect(() => new NotNullEmail(true as any)).toThrow("value in NotNullEmail MUST be string");
+        expect(() => new NotNullEmail({} as any)).toThrow("value in NotNullEmail MUST be string");
+        expect(() => new NotNullEmail([] as any)).toThrow("value in NotNullEmail MUST be string");
     });
 });
 
@@ -406,7 +406,7 @@ describe('NotNullEmail - Deep Edge Cases', () => {
     });
 
     test('should handle String object vs string primitive', () => {
-        expect(() => new NotNullEmail(new String('test@example.com') as any)).toThrow("value in Email MUST be string");
+        expect(() => new NotNullEmail(new String('test@example.com') as any)).toThrow("value in NotNullEmail MUST be string");
     });
 
     test('should not create memory leaks with repeated instantiation', () => {
