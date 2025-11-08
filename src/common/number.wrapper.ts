@@ -8,14 +8,12 @@ export default class Decimal implements Constant.NotNullDecimal, Constant.Nullab
     private readonly isNumberDataNull: boolean = true
     private nullValueNotVerified: boolean = true
     constructor(unknownData: unknown) {
-        try {
-            if (typeof unknownData === 'number' && this.isNotNaNNumber(unknownData)) {
-                if (this.isNumberNotInfinity(unknownData)) {
-                    this.numberData = unknownData
-                    this.isNumberDataNull = false
-                }
+        if (typeof unknownData === 'number' && this.isNotNaNNumber(unknownData)) {
+            if (this.isNumberNotInfinity(unknownData)) {
+                this.numberData = unknownData
+                this.isNumberDataNull = false
             }
-        } catch (_) { }
+        }
     }
     private isNotNaNNumber(unknownData: unknown): boolean {
         return !Number.isNaN(unknownData)
