@@ -3,7 +3,7 @@ import Constant from '@/common/constants'
 const errorNullNotVerified = "isNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isValidValue() must be used properly to avoid null"
 
-export default class Characters implements Constant.NotNullCharacters, Constant.NullableCharacters {
+export default class NullableCharacters implements Constant.NullableCharacters {
     private readonly stringData: string | null = null
     private readonly isStringDataNull: boolean = true
     private nullValueNotVerified: boolean = true

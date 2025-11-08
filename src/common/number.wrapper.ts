@@ -3,7 +3,7 @@ import Constant from '@/common/constants'
 const errorNullNotVerified = "isNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isValidValue() must be used properly to avoid null"
 
-export default class Decimal implements Constant.NotNullDecimal, Constant.NullableDecimal {
+export default class NullableDecimal implements Constant.NullableDecimal {
     private readonly numberData: number | null = null
     private readonly isNumberDataNull: boolean = true
     private nullValueNotVerified: boolean = true

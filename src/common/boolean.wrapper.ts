@@ -3,7 +3,7 @@ import Constant from '@/common/constants'
 const errorNullNotVerified = "isNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isValidValue() must be used properly to avoid null"
 
-export default class Condition implements Constant.NotNullCondition, Constant.NullableCondition {
+export class NullableCondition implements Constant.NullableCondition {
     private readonly booleanData: boolean | null = null
     private readonly isBooleanDataNull: boolean = true
     private nullValueNotVerified: boolean = true
