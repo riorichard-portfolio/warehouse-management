@@ -2,8 +2,9 @@ import Constant from '@/common/constants'
 
 const errorNullNotVerified = "isNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isValidValue() must be used properly to avoid null"
+const errorInvalidTypeForString = "value in NotNullCharacters MUST be string"
 
-export default class NullableCharacters implements Constant.NullableCharacters {
+export class NullableCharacters implements Constant.NullableCharacters {
     private readonly stringData: string | null = null
     private readonly isStringDataNull: boolean = true
     private nullValueNotVerified: boolean = true
@@ -31,5 +32,19 @@ export default class NullableCharacters implements Constant.NullableCharacters {
     public isNull(): boolean {
         this.nullValueNotVerified = false
         return this.isStringDataNull
+    }
+}
+
+export class NotNullCharacters implements Constant.NotNullCharacters {
+    private readonly stringData: string
+    constructor(stringData: string) {
+        if (typeof stringData === 'string') {
+            this.stringData = stringData
+        } else {
+            throw new Error(errorInvalidTypeForString)
+        }
+    }
+    public value(): string {
+        return this.stringData
     }
 }
