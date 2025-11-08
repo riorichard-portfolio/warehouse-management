@@ -1,10 +1,10 @@
-import Constant from '@/common/constants'
+import { OptBool, Bool } from "@/common/primitive.wrapper.abstraction"
 
 const errorNullNotVerified = "isNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
-const errorInvalidTypeForBoolean = "value in NotNullCondition MUST be boolean"
+const errorInvalidTypeForBoolean = "value in NotNullBoolean MUST be boolean"
 
-export class NullableCondition implements Constant.NullableCondition {
+export class NullableBoolean implements OptBool {
     private readonly booleanData: boolean | null = null
     private readonly isBooleanDataNull: boolean = true
     private nullValueNotVerified: boolean = true
@@ -44,7 +44,7 @@ export class NullableCondition implements Constant.NullableCondition {
     }
 }
 
-export class NotNullCondition implements Constant.NotNullCondition {
+export class NotNullBoolean implements Bool {
     private readonly booleanData: boolean
     constructor(booleanData: boolean) {
         if(typeof booleanData === 'boolean') {
