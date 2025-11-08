@@ -62,7 +62,7 @@ describe('NullableString', () => {
     // === DEVELOPER MISTAKES ===
     test('should throw when value() called without validation', () => {
         const str = new NullableString("test");
-        expect(() => str.value()).toThrow("isNull() must be called before value()");
+        expect(() => str.value()).toThrow("isNull()/isNotNull() must be called before value()");
     });
 
     test('should throw when value() called on null after verification', () => {

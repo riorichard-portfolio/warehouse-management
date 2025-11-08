@@ -64,17 +64,17 @@ describe('NullableBoolean', () => {
   // === VALIDATION ORDER REQUIREMENTS ===
   test('should throw when condition() called without validation', () => {
     const bool = new NullableBoolean(true);
-    expect(() => bool.condition()).toThrow("isNull() must be called before value()");
+    expect(() => bool.condition()).toThrow("isNull()/isNotNull() must be called before value()");
   });
 
   test('should throw when yes() called without validation', () => {
     const bool = new NullableBoolean(true);
-    expect(() => bool.yes()).toThrow("isNull() must be called before value()");
+    expect(() => bool.yes()).toThrow("isNull()/isNotNull() must be called before value()");
   });
 
   test('should throw when no() called without validation', () => {
     const bool = new NullableBoolean(false);
-    expect(() => bool.no()).toThrow("isNull() must be called before value()");
+    expect(() => bool.no()).toThrow("isNull()/isNotNull() must be called before value()");
   });
 
   test('should throw when condition() called on null after verification', () => {

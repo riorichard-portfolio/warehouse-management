@@ -56,7 +56,7 @@ describe('NullableNumber', () => {
   // === VALIDATION ORDER REQUIREMENTS ===
   test('should throw when value() called without validation', () => {
     const num = new NullableNumber(42);
-    expect(() => num.value()).toThrow("isNull() must be called before value()");
+    expect(() => num.value()).toThrow("isNull()/isNotNull() must be called before value()");
   });
 
   test('should throw when value() called on null after verification', () => {
