@@ -1,4 +1,4 @@
-import { OptBool, Bool } from "@/common/abstraction/primitive.wrapper.abstraction"
+import { OptBool, Bool } from "@/common/primitive.abstractions/primitive.wrapper.abstraction"
 
 const errorNullNotVerified = "isNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"

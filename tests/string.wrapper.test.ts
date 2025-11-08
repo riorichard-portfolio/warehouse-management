@@ -1,5 +1,5 @@
 import { NullableString, NotNullString } from '../src/common/string.wrapper';
-import { Str, OptStr } from '../src/common/abstraction/primitive.wrapper.abstraction'
+import { Str, OptStr } from '../src/common/primitive.abstractions/primitive.wrapper.abstraction'
 
 describe('NullableString', () => {
     // === VALID CASES ===
