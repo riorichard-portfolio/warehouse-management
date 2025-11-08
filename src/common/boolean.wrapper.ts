@@ -1,6 +1,6 @@
 import { OptBool, Bool } from "@/common/primitive.abstractions/primitive.wrapper.abstraction"
 
-const errorNullNotVerified = "isNull() must be called before value()"
+const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
 const errorInvalidTypeForBoolean = "value in NotNullBoolean MUST be boolean"
 
