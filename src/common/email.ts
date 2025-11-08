@@ -3,7 +3,7 @@ import { OptEmail, Email } from "@/common/primitive.abstractions/primitive.uniqu
 const emailRegex = /^(?!\.)(?!.*\.$)(?!.*\.\.)[a-zA-Z0-9!$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
-const errorInvalidTypeForEmail = "value in Email MUST be string"
+const errorInvalidTypeForEmail = "value in NotNullEmail MUST be string"
 const errorStringIsNotAnEmail = "value in NotNullEmail MUST be valid email string"
 
 export class NullableEmail implements OptEmail {
