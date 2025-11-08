@@ -1,10 +1,10 @@
-import Constant from '@/common/constants'
+import { OptStr, Str } from "@/common/primitive.wrapper.abstraction"
 
 const errorNullNotVerified = "isNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
-const errorInvalidTypeForString = "value in NotNullCharacters MUST be string"
+const errorInvalidTypeForString = "value in NotNullString MUST be string"
 
-export class NullableCharacters implements Constant.NullableCharacters {
+export class NullableString implements OptStr {
     private readonly stringData: string | null = null
     private readonly isStringDataNull: boolean = true
     private nullValueNotVerified: boolean = true
@@ -35,7 +35,7 @@ export class NullableCharacters implements Constant.NullableCharacters {
     }
 }
 
-export class NotNullCharacters implements Constant.NotNullCharacters {
+export class NotNullString implements Str {
     private readonly stringData: string
     constructor(stringData: string) {
         if (typeof stringData === 'string') {
