@@ -6,7 +6,7 @@ const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[45][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0
 const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
 
-export default class NullableUUID implements OptUUID {
+export class NullableUUID implements OptUUID {
     private readonly uuid: string | null = null;
     private readonly isUUIDNull: boolean = true
     private nullValueNotVerified: boolean = true;
