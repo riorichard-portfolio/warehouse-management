@@ -1,7 +1,8 @@
 import Constant from '@/common/constants'
 
 const errorNullNotVerified = "isNull() must be called before value()"
-const errorNotProperNullVerifyUse = "data is null :isValidValue() must be used properly to avoid null"
+const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
+const errorInvalidTypeForBoolean = "value in NotNullCondition MUST be boolean"
 
 export class NullableCondition implements Constant.NullableCondition {
     private readonly booleanData: boolean | null = null
@@ -40,5 +41,25 @@ export class NullableCondition implements Constant.NullableCondition {
     }
     public no(): boolean {
         return !this.getCondition()
+    }
+}
+
+export class NotNullCondition implements Constant.NotNullCondition {
+    private readonly booleanData: boolean
+    constructor(booleanData: boolean) {
+        if(typeof booleanData === 'boolean') {
+            this.booleanData = booleanData
+        } else{
+            throw new Error (errorInvalidTypeForBoolean)
+        }
+    }
+    public condition(): boolean {
+        return this.booleanData
+    }
+    public yes(): boolean {
+        return this.booleanData
+    }
+    public no(): boolean {
+        return !this.booleanData
     }
 }
