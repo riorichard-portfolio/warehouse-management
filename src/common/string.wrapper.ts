@@ -8,24 +8,21 @@ export default class Characters implements Constant.NotNullCharacters, Constant.
     private readonly isStringDataNull: boolean = true
     private nullValueNotVerified: boolean = true
     constructor(unknownData: unknown) {
-        try {
-            if (typeof unknownData === 'string') {
-                this.stringData = unknownData
-                this.isStringDataNull = false
-            }
-        } catch (_) { }
+        if (typeof unknownData === 'string') {
+            this.stringData = unknownData
+            this.isStringDataNull = false
+        }
     }
     public value(): string {
         if (this.nullValueNotVerified) throw new Error(errorNullNotVerified)
-        try {
-            if (typeof this.stringData === 'string') {
-                return this.stringData
-            }
-        } catch (_) { }
-        // if this triggered means value === null 
-        // means accessing null value not in condition isNotNull after verifying
-        // or still using it if it already verified null
-        throw new Error(errorNotProperNullVerifyUse)
+        if (typeof this.stringData === 'string') {
+            return this.stringData
+        } else {
+            // if this triggered means value === null 
+            // means accessing null value not in condition isNotNull after verifying
+            // or still using it if it already verified null
+            throw new Error(errorNotProperNullVerifyUse)
+        }
     }
     public isNotNull(): boolean {
         this.nullValueNotVerified = false
