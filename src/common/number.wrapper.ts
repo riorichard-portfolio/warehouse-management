@@ -1,11 +1,11 @@
-import Constant from '@/common/constants'
+import { OptNum, Num } from "@/common/primitive.wrapper.abstraction"
 
 const errorNullNotVerified = "isNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
-const errorInvalidTypeForNumber = "value in NotNullDecimal MUST be number"
-const errorNumberIsInfinity = "value in NotNullDecimal MUST be finite number"
+const errorInvalidTypeForNumber = "value in NotNullNumber MUST be number"
+const errorNumberIsInfinity = "value in NotNullNumber MUST be finite number"
 
-export class NullableDecimal implements Constant.NullableDecimal {
+export class NullableNumber implements OptNum {
     private readonly numberData: number | null = null
     private readonly isNumberDataNull: boolean = true
     private nullValueNotVerified: boolean = true
@@ -44,7 +44,7 @@ export class NullableDecimal implements Constant.NullableDecimal {
     }
 }
 
-export class NotNullDecimal implements Constant.NotNullDecimal {
+export class NotNullNumber implements Num {
     private readonly numberData: number
     constructor(numberData: number) {
         if (typeof numberData === 'number' && this.isNotNaNNumber(numberData)) {
