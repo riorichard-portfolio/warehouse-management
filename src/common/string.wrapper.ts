@@ -3,11 +3,14 @@ import { OptStr, Str } from "@/common/primitive.abstractions/primitive.wrapper.a
 const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
 const errorInvalidTypeForString = "value in NotNullString MUST be string"
+const errorDataIsNeverUsed = "use data properly at least for verifying: use isNull()/isNotNull()"
+const errorValueExistButNeverUsed = "value exist but never used: use value() for notNull data value"
 
 export class NullableString implements OptStr {
     private readonly stringData: string | null = null
     private readonly isStringDataNull: boolean = true
     private nullValueNotVerified: boolean = true
+    private valueNotUsed: boolean = true
     constructor(unknownData: unknown) {
         if (typeof unknownData === 'string') {
             this.stringData = unknownData
@@ -17,6 +20,7 @@ export class NullableString implements OptStr {
     public value(): string {
         if (this.nullValueNotVerified) throw new Error(errorNullNotVerified)
         if (typeof this.stringData === 'string') {
+            this.valueNotUsed = false
             return this.stringData
         } else {
             // if this triggered means value === null 
@@ -33,10 +37,15 @@ export class NullableString implements OptStr {
         this.nullValueNotVerified = false
         return this.isStringDataNull
     }
+    public finish(): void {
+        if (this.nullValueNotVerified) throw new Error(errorDataIsNeverUsed)
+        else if (!this.isStringDataNull && this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
+    }
 }
 
 export class NotNullString implements Str {
     private readonly stringData: string
+    private valueNotUsed: boolean = true
     constructor(stringData: string) {
         if (typeof stringData === 'string') {
             this.stringData = stringData
@@ -45,6 +54,10 @@ export class NotNullString implements Str {
         }
     }
     public value(): string {
+        this.valueNotUsed = false
         return this.stringData
+    }
+    public finish(): void {
+        if (this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
     }
 }

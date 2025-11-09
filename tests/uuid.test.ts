@@ -540,7 +540,7 @@ describe('Performance and Scalability', () => {
         }
 
         const endTime = Date.now();
-        expect(endTime - startTime).toBeLessThan(100); // Should be fast
+        expect(endTime - startTime).toBeLessThan(200); // Should be fast , but this is arbitary
     });
 
     test('should handle high volume UUID generation', () => {

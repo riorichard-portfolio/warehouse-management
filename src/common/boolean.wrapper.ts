@@ -3,11 +3,14 @@ import { OptBool, Bool } from "@/common/primitive.abstractions/primitive.wrapper
 const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
 const errorInvalidTypeForBoolean = "value in NotNullBoolean MUST be boolean"
+const errorDataIsNeverUsed = "use data properly at least for verifying: use isNull()/isNotNull()"
+const errorValueExistButNeverUsed = "value exist but never used: use value() for notNull data value"
 
 export class NullableBoolean implements OptBool {
     private readonly booleanData: boolean | null = null
     private readonly isBooleanDataNull: boolean = true
     private nullValueNotVerified: boolean = true
+    private valueNotUsed: boolean = true
     constructor(unknownData: unknown) {
         if (typeof unknownData === 'boolean') {
             this.booleanData = unknownData
@@ -17,6 +20,7 @@ export class NullableBoolean implements OptBool {
     private getCondition(): boolean {
         if (this.nullValueNotVerified) throw new Error(errorNullNotVerified)
         if (typeof this.booleanData === 'boolean') {
+            this.valueNotUsed = false
             return this.booleanData
         } else {
             // if this triggered means value === null 
@@ -42,24 +46,35 @@ export class NullableBoolean implements OptBool {
     public no(): boolean {
         return !this.getCondition()
     }
+    public finish(): void {
+        if (this.nullValueNotVerified) throw new Error(errorDataIsNeverUsed)
+        else if (!this.isBooleanDataNull && this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
+    }
 }
 
 export class NotNullBoolean implements Bool {
     private readonly booleanData: boolean
+    private valueNotUsed: boolean = true
     constructor(booleanData: boolean) {
-        if(typeof booleanData === 'boolean') {
+        if (typeof booleanData === 'boolean') {
             this.booleanData = booleanData
-        } else{
-            throw new Error (errorInvalidTypeForBoolean)
+        } else {
+            throw new Error(errorInvalidTypeForBoolean)
         }
     }
     public condition(): boolean {
+        this.valueNotUsed = false
         return this.booleanData
     }
     public yes(): boolean {
+        this.valueNotUsed = false
         return this.booleanData
     }
     public no(): boolean {
+        this.valueNotUsed = false
         return !this.booleanData
+    }
+    public finish(): void {
+        if (this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
     }
 }
