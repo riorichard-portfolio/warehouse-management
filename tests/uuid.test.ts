@@ -530,6 +530,11 @@ describe('Cross-Class UUID Integration', () => {
 });
 
 describe('Performance and Scalability', () => {
+    beforeEach(() => {
+        jest.resetModules(); // ⭐ Reset state
+        if (global.gc) global.gc(); // ⭐ Force garbage collection (Node.js)
+    });
+
     test('should handle high volume UUID validation', () => {
         const startTime = Date.now();
         const batchSize = 1000;
@@ -557,7 +562,7 @@ describe('Performance and Scalability', () => {
 
         const endTime = Date.now();
         expect(generatedUUIDs.size).toBe(batchSize);
-        expect(endTime - startTime).toBeLessThan(500); // Should complete quickly
+        expect(endTime - startTime).toBeLessThan(200); // Should complete quickly
     });
 });
 
