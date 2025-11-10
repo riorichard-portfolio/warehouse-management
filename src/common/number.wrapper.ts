@@ -1,4 +1,5 @@
-import { OptNum, Num } from "@/common/primitive.abstractions/primitive.wrapper.abstraction"
+import { OptNum, Num, Bool } from "@/common/primitive.abstractions/primitive.wrapper.abstraction"
+import { NotNullBoolean } from "./boolean.wrapper"
 
 const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
@@ -9,14 +10,12 @@ const errorValueExistButNeverUsed = "value exist but never used: use value() for
 
 export class NullableNumber implements OptNum {
     private readonly numberData: number | null = null
-    private readonly isNumberDataNull: boolean = true
     private nullValueNotVerified: boolean = true
     private valueNotUsed: boolean = true
     constructor(unknownData: unknown) {
         if (typeof unknownData === 'number' && this.isNotNaNNumber(unknownData)) {
             if (this.isNumberNotInfinity(unknownData)) {
                 this.numberData = unknownData
-                this.isNumberDataNull = false
             }
         }
     }
@@ -26,7 +25,7 @@ export class NullableNumber implements OptNum {
     private isNumberNotInfinity(unknownNumberData: number) {
         return isFinite(unknownNumberData)
     }
-    public value(): number {
+    private getSafeValue(): number {
         if (this.nullValueNotVerified) throw new Error(errorNullNotVerified)
         if (typeof this.numberData === 'number') {
             this.valueNotUsed = false
@@ -38,17 +37,61 @@ export class NullableNumber implements OptNum {
             throw new Error(errorNotProperNullVerifyUse)
         }
     }
+    public value(): number {
+        return this.getSafeValue()
+    }
+    private isNumberDataNull(): boolean {
+        return this.numberData === null
+    }
     public isNotNull(): boolean {
         this.nullValueNotVerified = false
-        return !this.isNumberDataNull
+        return !this.isNumberDataNull()
     }
     public isNull(): boolean {
         this.nullValueNotVerified = false
-        return this.isNumberDataNull
+        return this.isNumberDataNull()
     }
     public finish(): void {
         if (this.nullValueNotVerified) throw new Error(errorDataIsNeverUsed)
-        else if (!this.isNumberDataNull && this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
+        else if (!this.isNumberDataNull() && this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
+    }
+    private mathOperation(
+        operation: '+' | '-' | '*' | '/',
+        withNumber: Num
+    ): Num {
+        switch (operation) {
+            case '+': return new NotNullNumber(this.getSafeValue() + withNumber.value());
+            case '-': return new NotNullNumber(this.getSafeValue() - withNumber.value());
+            case '*': return new NotNullNumber(this.getSafeValue() * withNumber.value());
+            case '/': return new NotNullNumber(this.getSafeValue() / withNumber.value());
+        }
+    }
+    public multiplyBy(number: Num): Num {
+        return this.mathOperation('*', number)
+    }
+    public add(number: Num): Num {
+        return this.mathOperation('+', number)
+    }
+    public minus(number: Num): Num {
+        return this.mathOperation('-', number)
+    }
+    public dividedBy(number: Num): Num {
+        return this.mathOperation('/', number)
+    }
+    public equalTo(number: Num): Bool {
+        return new NotNullBoolean(this.getSafeValue() === number.value())
+    }
+    public greaterOrEqualThan(number: Num): Bool {
+        return new NotNullBoolean(this.getSafeValue() >= number.value())
+    }
+    public greaterThan(number: Num): Bool {
+        return new NotNullBoolean(this.getSafeValue() > number.value())
+    }
+    public lessOrEqualThan(number: Num): Bool {
+        return new NotNullBoolean(this.getSafeValue() <= number.value())
+    }
+    public lessThan(number: Num): Bool {
+        return new NotNullBoolean(this.getSafeValue() < number.value())
     }
 }
 
@@ -72,11 +115,52 @@ export class NotNullNumber implements Num {
     private isNumberNotInfinity(unknownNumberData: number) {
         return isFinite(unknownNumberData)
     }
-    public value(): number {
+    private getValueAndFlagUsed(): number {
         this.valueNotUsed = false
         return this.numberData
     }
+    public value(): number {
+        return this.getValueAndFlagUsed()
+    }
     public finish(): void {
         if (this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
+    }
+    private mathOperation(
+        operation: '+' | '-' | '*' | '/',
+        withNumber: Num
+    ): Num {
+        switch (operation) {
+            case '+': return new NotNullNumber(this.getValueAndFlagUsed() + withNumber.value());
+            case '-': return new NotNullNumber(this.getValueAndFlagUsed() - withNumber.value());
+            case '*': return new NotNullNumber(this.getValueAndFlagUsed() * withNumber.value());
+            case '/': return new NotNullNumber(this.getValueAndFlagUsed() / withNumber.value());
+        }
+    }
+    public multiplyBy(number: Num): Num {
+        return this.mathOperation('*', number)
+    }
+    public add(number: Num): Num {
+        return this.mathOperation('+', number)
+    }
+    public minus(number: Num): Num {
+        return this.mathOperation('-', number)
+    }
+    public dividedBy(number: Num): Num {
+        return this.mathOperation('/', number)
+    }
+    public equalTo(number: Num): Bool {
+        return new NotNullBoolean(this.getValueAndFlagUsed() === number.value())
+    }
+    public greaterOrEqualThan(number: Num): Bool {
+        return new NotNullBoolean(this.getValueAndFlagUsed() >= number.value())
+    }
+    public greaterThan(number: Num): Bool {
+        return new NotNullBoolean(this.getValueAndFlagUsed() > number.value())
+    }
+    public lessOrEqualThan(number: Num): Bool {
+        return new NotNullBoolean(this.getValueAndFlagUsed() <= number.value())
+    }
+    public lessThan(number: Num): Bool {
+        return new NotNullBoolean(this.getValueAndFlagUsed() < number.value())
     }
 }
