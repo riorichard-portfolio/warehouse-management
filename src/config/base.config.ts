@@ -6,9 +6,9 @@ export interface SetConfig<
     TNumberKeys extends string,
     TBooleanKeys extends string
 > {
-    SET_CONFIG_STRING(configKey: TStringKeys, configData: unknown): this
-    SET_CONFIG_NUMBER(configKey: TNumberKeys, configData: unknown): this
-    SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configData: unknown): this
+    SET_CONFIG_STRING(configKey: TStringKeys, configDataString: unknown): this
+    SET_CONFIG_NUMBER(configKey: TNumberKeys, configDataString: unknown): this
+    SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configDataString: unknown): this
 }
 
 export interface GetConfig<
@@ -35,10 +35,10 @@ export default class Config<
         this.nameOfConfig = nameOfConfig
         configKeys.forEach(configKey => this.config[configKey] = null)
     }
-    public SET_CONFIG_STRING(configKey: TStringKeys, configData: unknown): this {
+    public SET_CONFIG_STRING(configKey: TStringKeys, configDataString: unknown): this {
         if (configKey in this.config) {
             if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
-            const configString = new NullableString(configData)
+            const configString = new NullableString(configDataString)
             if (configString.isNotNull()) {
                 this.config[configKey] = configString.value()
                 return this
@@ -50,10 +50,10 @@ export default class Config<
         }
     }
 
-    public SET_CONFIG_NUMBER(configKey: TNumberKeys, configData: unknown): this {
+    public SET_CONFIG_NUMBER(configKey: TNumberKeys, configDataString: unknown): this {
         if (configKey in this.config) {
             if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
-            const configString = new NullableString(configData)
+            const configString = new NullableString(configDataString)
             if (configString.isNotNull()) {
                 const numberConfig = StringToNumber(configString)
                 if (numberConfig.isNotNull()) {
@@ -71,10 +71,10 @@ export default class Config<
         }
     }
 
-    public SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configData: unknown): this {
+    public SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configDataString: unknown): this {
         if (configKey in this.config) {
             if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
-            const configString = new NullableString(configData)
+            const configString = new NullableString(configDataString)
             if (configString.isNotNull()) {
                 if (configString.value().toLowerCase() === 'true' || configString.value().toLowerCase() === 'false') {
                     this.config[configKey] = configString.value().toLocaleLowerCase() === 'true'
