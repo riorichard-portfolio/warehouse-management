@@ -1,4 +1,4 @@
-import { OptTime, Time } from "@/common/primitive.abstractions/primitive.unique.abstraction";
+import { OptTime, Time } from "./primitive.abstractions/primitive.unique.abstraction";
 
 const errorNullNotVerified = "isNull()/isNotNull() must be called before unixTime()/date()/isoString()"
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"

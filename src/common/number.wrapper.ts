@@ -1,4 +1,4 @@
-import { OptNum, Num, Bool } from "@/common/primitive.abstractions/primitive.wrapper.abstraction"
+import { OptNum, Num, Bool } from "./primitive.abstractions/primitive.wrapper.abstraction"
 import { NotNullBoolean } from "./boolean.wrapper"
 
 const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"

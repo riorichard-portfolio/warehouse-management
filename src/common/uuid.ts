@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 
-import { OptUUID, UUID } from "@/common/primitive.abstractions/primitive.unique.abstraction";
+import { OptUUID, UUID } from "./primitive.abstractions/primitive.unique.abstraction";
 
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[45][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const errorNullNotVerified = "isNull()/isNotNull() must be called before value()"
