@@ -52,10 +52,16 @@ export class NullableBoolean implements OptBool {
         else if (!this.isBooleanDataNull() && this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
     }
     public and(booleanData: Bool): Bool {
-        return new NotNullBoolean(this.getCondition() && booleanData.condition())
+        // eager load for failing fast if there is procedural violation
+        const currentCondition = this.getCondition()
+        const newBooleanTruth = booleanData.condition() // eager load new boolean data , to flag used
+        return new NotNullBoolean(currentCondition && newBooleanTruth)
     }
     public or(booleanData: Bool): Bool {
-        return new NotNullBoolean(this.getCondition() || booleanData.condition())
+        // eager load for failing fast if there is procedural violation
+        const currentCondition = this.getCondition()
+        const newBooleanTruth = booleanData.condition() // eager load new boolean data , to flag used
+        return new NotNullBoolean(currentCondition || newBooleanTruth)
     }
 }
 
@@ -86,9 +92,13 @@ export class NotNullBoolean implements Bool {
         if (this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
     }
     public and(booleanData: Bool): Bool {
-        return new NotNullBoolean(this.getConditionAndFlagUsed() && booleanData.condition())
+        const currentCondition = this.getConditionAndFlagUsed()
+        const newBooleanTruth = booleanData.condition()
+        return new NotNullBoolean(currentCondition && newBooleanTruth)
     }
     public or(booleanData: Bool): Bool {
-        return new NotNullBoolean(this.getConditionAndFlagUsed() || booleanData.condition())
+        const currentCondition = this.getConditionAndFlagUsed()
+        const newBooleanTruth = booleanData.condition()
+        return new NotNullBoolean(currentCondition || newBooleanTruth)
     }
 }
