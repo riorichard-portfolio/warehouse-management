@@ -37,6 +37,7 @@ export default class Config<
     }
     public SET_CONFIG_STRING(configKey: TStringKeys, configString: OptStr): this {
         if (configKey in this.config) {
+            if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
             if (configString.isNotNull()) {
                 this.config[configKey] = configString.value()
                 return this
@@ -50,6 +51,7 @@ export default class Config<
 
     public SET_CONFIG_NUMBER(configKey: TNumberKeys, configString: OptStr): this {
         if (configKey in this.config) {
+            if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
             if (configString.isNotNull()) {
                 const numberConfig = StringToNumber(configString)
                 if (numberConfig.isNotNull()) {
@@ -69,6 +71,7 @@ export default class Config<
 
     public SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configString: OptStr): this {
         if (configKey in this.config) {
+            if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
             if (configString.isNotNull()) {
                 if (configString.value().toLowerCase() === 'true' || configString.value().toLowerCase() === 'false') {
                     this.config[configKey] = configString.value().toLocaleLowerCase() === 'true'
@@ -116,13 +119,19 @@ export default class Config<
         }
     }
     public GET_CONFIG_STRING(configKey: TStringKeys): string {
-        return this.getSaveConfig(configKey,'string')
+        return this.getSaveConfig(configKey, 'string')
     }
 
     public GET_CONFIG_NUMBER(configKey: TNumberKeys): number {
-        return this.getSaveConfig(configKey,'number')
+        return this.getSaveConfig(configKey, 'number')
     }
     public GET_CONFIG_BOOLEAN(configKey: TBooleanKeys): boolean {
-        return this.getSaveConfig(configKey,'boolean')
+        return this.getSaveConfig(configKey, 'boolean')
+    }
+    public ALL_SET(): void {
+        const nullKeys = Object.keys(this.config).filter(key => this.config[key] === null)
+        if (nullKeys.length > 0) {
+            throw new Error(`missing env variables: please set ${nullKeys.join(', ')} in ${this.nameOfConfig}`)
+        }
     }
 }
