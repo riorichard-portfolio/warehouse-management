@@ -101,7 +101,7 @@ describe('Boolean Wrapper - Chaining Operations', () => {
             // got circuit break because nullable violate procedure , so value never used
             expect(() => {
                 normalBool.finish();
-            }).toThrow('value exist but never used: use value() for notNull data value');
+            }).toThrow('value exist but never used: use yes()/no()/conditon() for notNull data value');
             // verify never done violated procedural use , got error when finished call
             expect(() => {
                 nullableBool.finish();
@@ -121,7 +121,7 @@ describe('Boolean Wrapper - Chaining Operations', () => {
             // got circuit break because nullable violate procedure , so value never used
             expect(() => {
                 normalBool.finish();
-            }).toThrow('value exist but never used: use value() for notNull data value');
+            }).toThrow('value exist but never used: use yes()/no()/conditon() for notNull data value');
             // verify never done violated procedural use , got error when finished call
             nullBool.finish() // handle null gracefully should not throw
         });
@@ -134,7 +134,7 @@ describe('Boolean Wrapper - Chaining Operations', () => {
             // ❌ But never used in any operation
             expect(() => {
                 nullableBool.finish();
-            }).toThrow('value exist but never used: use value() for notNull data value');
+            }).toThrow('value exist but never used: use yes()/no()/conditon() for notNull data value');
         });
 
         test('should throw when notNull boolean never used after chaining creation', () => {
@@ -146,7 +146,7 @@ describe('Boolean Wrapper - Chaining Operations', () => {
             // ❌ Result never used
             expect(() => {
                 result.finish();
-            }).toThrow('value exist but never used: use value() for notNull data value');
+            }).toThrow('value exist but never used: use yes()/no()/conditon() for notNull data value');
 
             a.finish();
             b.finish();
@@ -163,7 +163,7 @@ describe('Boolean Wrapper - Chaining Operations', () => {
             expect(nullBool.isNull()).toBe(true);
 
             nullBool.finish();
-            expect(() => normalBool.finish()).toThrow('value exist but never used: use value() for notNull data value')
+            expect(() => normalBool.finish()).toThrow('value exist but never used: use yes()/no()/conditon() for notNull data value')
         });
 
         test('should handle complex invalid chaining scenario', () => {
@@ -179,8 +179,8 @@ describe('Boolean Wrapper - Chaining Operations', () => {
             expect(() => b.finish()).toThrow('use data properly at least for verifying: use isNull()/isNotNull()');
             // because b is throwing at first place , a & c never operate which , a & c never used
             // happened because b is Nullable but never been verified
-            expect(() => a.finish()).toThrow('value exist but never used: use value() for notNull data value'); // ✅ a never used!
-            expect(() => c.finish()).toThrow('value exist but never used: use value() for notNull data value'); // ✅ c never used!
+            expect(() => a.finish()).toThrow('value exist but never used: use yes()/no()/conditon() for notNull data value'); // ✅ a never used!
+            expect(() => c.finish()).toThrow('value exist but never used: use yes()/no()/conditon() for notNull data value'); // ✅ c never used!
         });
     });
 
@@ -226,7 +226,7 @@ describe('Boolean Wrapper - Chaining Operations', () => {
             a.finish();
             b.finish();
             c.finish();
-            expect(() => d.finish()).toThrow('value exist but never used: use value() for notNull data value'); // ✅ d never used!
+            expect(() => d.finish()).toThrow('value exist but never used: use yes()/no()/conditon() for notNull data value'); // ✅ d never used!
             firstChain.finish();
         });
     });

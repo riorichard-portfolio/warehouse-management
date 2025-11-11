@@ -4,7 +4,7 @@ const errorNullNotVerified = "isNull()/isNotNull() must be called before value()
 const errorNotProperNullVerifyUse = "data is null :isNull()/isNotNull() must be used properly to avoid null"
 const errorInvalidTypeForBoolean = "value in NotNullBoolean MUST be boolean"
 const errorDataIsNeverUsed = "use data properly at least for verifying: use isNull()/isNotNull()"
-const errorValueExistButNeverUsed = "value exist but never used: use value() for notNull data value"
+const errorValueExistButNeverUsed = "value exist but never used: use yes()/no()/conditon() for notNull data value"
 
 export class NullableBoolean implements OptBool {
     private readonly booleanData: boolean | null = null
