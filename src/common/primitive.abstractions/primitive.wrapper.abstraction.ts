@@ -28,8 +28,8 @@ export interface Bool {
     no(): boolean // is it no (value === false => output true , else false)
     condition(): boolean // true or false
     finish(): void;
-    // or(condition: Bool): Bool;
-    // and(condition: Bool): Bool;
+    or(condition: Bool): Bool;
+    and(condition: Bool): Bool;
 }
 export interface OptBool extends Bool {
     isNotNull(): boolean;
