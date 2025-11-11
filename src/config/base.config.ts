@@ -103,7 +103,7 @@ export default class Config<
                     return this.config[configKey]
                 } else {
                     throw new Error(
-                        `invalid value type for key ${configKey}: please set proper type value for the key
+                        `invalid value type for key ${configKey}: please get with proper type value for the key
                         in config ${this.nameOfConfig}`
                     )
                 }
