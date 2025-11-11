@@ -8,13 +8,11 @@ const errorValueExistButNeverUsed = "value exist but never used: use value() for
 
 export class NullableBoolean implements OptBool {
     private readonly booleanData: boolean | null = null
-    private readonly isBooleanDataNull: boolean = true
     private nullValueNotVerified: boolean = true
     private valueNotUsed: boolean = true
     constructor(unknownData: unknown) {
         if (typeof unknownData === 'boolean') {
             this.booleanData = unknownData
-            this.isBooleanDataNull = false
         }
     }
     private getCondition(): boolean {
@@ -29,16 +27,19 @@ export class NullableBoolean implements OptBool {
             throw new Error(errorNotProperNullVerifyUse)
         }
     }
+    private isBooleanDataNull(): boolean {
+        return this.booleanData === null
+    }
     public condition(): boolean {
         return this.getCondition()
     }
     public isNotNull(): boolean {
         this.nullValueNotVerified = false
-        return !this.isBooleanDataNull
+        return !this.isBooleanDataNull()
     }
     public isNull(): boolean {
         this.nullValueNotVerified = false
-        return this.isBooleanDataNull
+        return this.isBooleanDataNull()
     }
     public yes(): boolean {
         return this.getCondition()
@@ -48,7 +49,13 @@ export class NullableBoolean implements OptBool {
     }
     public finish(): void {
         if (this.nullValueNotVerified) throw new Error(errorDataIsNeverUsed)
-        else if (!this.isBooleanDataNull && this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
+        else if (!this.isBooleanDataNull() && this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
+    }
+    public and(booleanData: Bool): Bool {
+        return new NotNullBoolean(this.getCondition() && booleanData.condition())
+    }
+    public or(booleanData: Bool): Bool {
+        return new NotNullBoolean(this.getCondition() || booleanData.condition())
     }
 }
 
@@ -62,19 +69,26 @@ export class NotNullBoolean implements Bool {
             throw new Error(errorInvalidTypeForBoolean)
         }
     }
-    public condition(): boolean {
+    private getConditionAndFlagUsed(): boolean {
         this.valueNotUsed = false
         return this.booleanData
+    }
+    public condition(): boolean {
+        return this.getConditionAndFlagUsed()
     }
     public yes(): boolean {
-        this.valueNotUsed = false
-        return this.booleanData
+        return this.getConditionAndFlagUsed()
     }
     public no(): boolean {
-        this.valueNotUsed = false
-        return !this.booleanData
+        return !this.getConditionAndFlagUsed()
     }
     public finish(): void {
         if (this.valueNotUsed) throw new Error(errorValueExistButNeverUsed)
+    }
+    public and(booleanData: Bool): Bool {
+        return new NotNullBoolean(this.getConditionAndFlagUsed() && booleanData.condition())
+    }
+    public or(booleanData: Bool): Bool {
+        return new NotNullBoolean(this.getConditionAndFlagUsed() || booleanData.condition())
     }
 }
