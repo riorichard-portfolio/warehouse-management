@@ -38,7 +38,7 @@ export default class Config<
     }
     private idempotentSafetyValidateKey(configKey: TStringKeys | TNumberKeys | TBooleanKeys): void {
         if (configKey in this.config) {
-            if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
+            if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set in ${this.nameOfConfig}`)
         } else {
             throw new Error(`invalid config key: ${configKey} is not registered in config ${this.nameOfConfig}`)
         }
