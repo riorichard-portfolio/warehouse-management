@@ -1,14 +1,11 @@
-import { StringToNumber } from "src/common/string.to.number.parser";
-import { NullableString } from "../common/string.wrapper";
-
 export interface SetConfig<
     TStringKeys extends string,
     TNumberKeys extends string,
     TBooleanKeys extends string
 > {
-    SET_CONFIG_STRING(configKey: TStringKeys, configDataString: unknown): this
-    SET_CONFIG_NUMBER(configKey: TNumberKeys, configDataString: unknown): this
-    SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configDataString: unknown): this
+    SET_CONFIG_STRING(configKey: TStringKeys, configData: unknown): this
+    SET_CONFIG_NUMBER(configKey: TNumberKeys, configData: unknown): this
+    SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configData: unknown): this
 }
 
 export interface GetConfig<
@@ -30,64 +27,80 @@ export default class Config<
     SetConfig<TStringKeys, TNumberKeys, TBooleanKeys>,
     GetConfig<TStringKeys, TNumberKeys, TBooleanKeys> {
     private config: Record<string, string | number | boolean | null> = {}
+    private usedKeysRecord: Record<string, boolean> = {}
     private nameOfConfig: string;
     constructor(nameOfConfig: string, configKeys: (TStringKeys | TNumberKeys | TBooleanKeys)[]) {
         this.nameOfConfig = nameOfConfig
-        configKeys.forEach(configKey => this.config[configKey] = null)
+        configKeys.forEach(configKey => {
+            this.config[configKey] = null
+            this.usedKeysRecord[configKey] = false
+        })
     }
-    public SET_CONFIG_STRING(configKey: TStringKeys, configDataString: unknown): this {
+    private idempotentSafetyValidateKey(configKey: TStringKeys | TNumberKeys | TBooleanKeys): void {
         if (configKey in this.config) {
             if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
-            const configString = new NullableString(configDataString)
-            if (configString.isNotNull()) {
-                this.config[configKey] = configString.value()
-                return this
-            } else {
-                throw new Error(`invalid config value: ${configKey} is not set yet for ${this.nameOfConfig}`)
-            }
         } else {
             throw new Error(`invalid config key: ${configKey} is not registerd in config ${this.nameOfConfig}`)
         }
     }
-
-    public SET_CONFIG_NUMBER(configKey: TNumberKeys, configDataString: unknown): this {
-        if (configKey in this.config) {
-            if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
-            const configString = new NullableString(configDataString)
-            if (configString.isNotNull()) {
-                const numberConfig = StringToNumber(configString)
-                if (numberConfig.isNotNull()) {
-                    this.config[configKey] = numberConfig.value()
-                    return this
-                } else {
-                    throw new Error(`invalid config value: ${configKey} is not a number in config ${this.nameOfConfig}`)
-
-                }
-            } else {
-                throw new Error(`invalid config value: ${configKey} is not set yet for ${this.nameOfConfig}`)
-            }
+    public SET_CONFIG_STRING(configKey: TStringKeys, configData: unknown): this {
+        this.idempotentSafetyValidateKey(configKey)
+        if (typeof configData === 'number') {
+            this.config[configKey] = configData.toString()
+        } else if (typeof configData === 'string') {
+            this.config[configKey] = configData
         } else {
-            throw new Error(`invalid config key: ${configKey} is not registerd in config ${this.nameOfConfig}`)
+            throw new Error(
+                `invalid config value: ${configKey} is not a number or a string 
+                in config ${this.nameOfConfig} for SET_CONFIG_STRING`
+            )
         }
+        return this
     }
 
-    public SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configDataString: unknown): this {
-        if (configKey in this.config) {
-            if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
-            const configString = new NullableString(configDataString)
-            if (configString.isNotNull()) {
-                if (configString.value().toLowerCase() === 'true' || configString.value().toLowerCase() === 'false') {
-                    this.config[configKey] = configString.value().toLocaleLowerCase() === 'true'
-                    return this
-                } else {
-                    throw new Error(`invalid config value: ${configKey} is not a boolean in config ${this.nameOfConfig}`)
-                }
+    public SET_CONFIG_NUMBER(configKey: TNumberKeys, configData: unknown): this {
+        this.idempotentSafetyValidateKey(configKey)
+        if (typeof configData === 'number') {
+            this.config[configKey] = configData
+        } else if (typeof configData === 'string') {
+            const numberConfigData = Number(configData)
+            if (Number.isNaN(numberConfigData)) {
+                throw new Error(
+                    `invalid config value: ${configKey} is not a valid string for number 
+                    in config ${this.nameOfConfig} for SET_CONFIG_NUMBER`
+                )
             } else {
-                throw new Error(`invalid config value: ${configKey} is not set yet for ${this.nameOfConfig}`)
+                this.config[configKey] = numberConfigData
             }
         } else {
-            throw new Error(`invalid config key: ${configKey} is not registerd in config ${this.nameOfConfig}`)
+            throw new Error(
+                `invalid config value: ${configKey} is not a number or a string 
+                in config ${this.nameOfConfig} for SET_CONFIG_NUMBER`
+            )
         }
+        return this
+    }
+
+    public SET_CONFIG_BOOLEAN(configKey: TBooleanKeys, configData: unknown): this {
+        this.idempotentSafetyValidateKey(configKey)
+        if (typeof configData === 'boolean') {
+            this.config[configKey] = configData
+        } else if (typeof configData === 'string') {
+            if (configData !== "true" && configData !== "false") {
+                throw new Error(
+                    `invalid config value: ${configKey} is not a valid string for boolean
+                    in config ${this.nameOfConfig} for SET_CONFIG_BOOLEAN`
+                )
+            } else {
+                this.config[configKey] = (configData === "true")
+            }
+        } else {
+            throw new Error(
+                `invalid config value: ${configKey} is not a boolean or a string 
+                in config ${this.nameOfConfig} for SET_CONFIG_BOOLEAN`
+            )
+        }
+        return this
     }
     // ✅ FUNCTION OVERLOAD SIGNATURES
     private getSaveConfig(configKey: TStringKeys, valueType: 'string'): string;
@@ -106,6 +119,7 @@ export default class Config<
                 )
             } else {
                 if (typeof this.config[configKey] === valueType) {
+                    this.usedKeysRecord[configKey] = true
                     return this.config[configKey]
                 } else {
                     throw new Error(
@@ -135,6 +149,14 @@ export default class Config<
         const nullKeys = Object.keys(this.config).filter(key => this.config[key] === null)
         if (nullKeys.length > 0) {
             throw new Error(`missing env variables: please set ${nullKeys.join(', ')} in ${this.nameOfConfig}`)
+        }
+    }
+
+    public PROPERLY_USED(): void {
+        const unusedKeys = Object.values(this.usedKeysRecord).filter(configValue => configValue === false)
+        if (unusedKeys.length > 0) {
+            throw new Error(`config keys not used properly: please use ${unusedKeys.join(', ')} properly
+            or unset unused config keys in ${this.nameOfConfig}`)
         }
     }
 }
