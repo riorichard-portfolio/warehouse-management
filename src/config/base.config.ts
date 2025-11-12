@@ -40,7 +40,7 @@ export default class Config<
         if (configKey in this.config) {
             if (this.config[configKey] !== null) throw new Error(`invalid set operation: ${configKey} is already set ${this.nameOfConfig}`)
         } else {
-            throw new Error(`invalid config key: ${configKey} is not registerd in config ${this.nameOfConfig}`)
+            throw new Error(`invalid config key: ${configKey} is not registered in config ${this.nameOfConfig}`)
         }
     }
     public SET_CONFIG_STRING(configKey: TStringKeys, configData: unknown): this {
@@ -130,7 +130,7 @@ export default class Config<
             }
         } else {
             throw new Error(
-                `invalid config key: ${configKey} is not registerd in config ${this.nameOfConfig} 
+                `invalid config key: ${configKey} is not registered in config ${this.nameOfConfig} 
                 use registered key instead to get config string`
             )
         }
@@ -145,14 +145,11 @@ export default class Config<
     public GET_CONFIG_BOOLEAN(configKey: TBooleanKeys): boolean {
         return this.getSaveConfig(configKey, 'boolean')
     }
-    public ALL_SET(): void {
+    public FINISH(): void {
         const nullKeys = Object.keys(this.config).filter(key => this.config[key] === null)
         if (nullKeys.length > 0) {
             throw new Error(`missing env variables: please set ${nullKeys.join(', ')} in ${this.nameOfConfig}`)
         }
-    }
-
-    public PROPERLY_USED(): void {
         const unusedKeys = Object.keys(this.usedKeysRecord).filter(key => this.usedKeysRecord[key] === false)
         if (unusedKeys.length > 0) {
             throw new Error(`config keys not used properly: please use ${unusedKeys.join(', ')} properly
