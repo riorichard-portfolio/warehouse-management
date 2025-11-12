@@ -153,7 +153,7 @@ export default class Config<
     }
 
     public PROPERLY_USED(): void {
-        const unusedKeys = Object.keys(this.usedKeysRecord).filter(key => this.config[key] === false)
+        const unusedKeys = Object.keys(this.usedKeysRecord).filter(key => this.usedKeysRecord[key] === false)
         if (unusedKeys.length > 0) {
             throw new Error(`config keys not used properly: please use ${unusedKeys.join(', ')} properly
             or unset unused config keys in ${this.nameOfConfig}`)
