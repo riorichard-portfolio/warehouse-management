@@ -11,7 +11,7 @@ type PostgreNumberKeys =
     | "PG_MAX_POOL"
 
 
-const postgreKeys: (PostgreStringKeys|PostgreNumberKeys)[] = [
+const postgreKeys: (PostgreStringKeys | PostgreNumberKeys)[] = [
     "PG_HOST",
     "PG_USER",
     "PG_PASSWORD",
@@ -22,5 +22,16 @@ const postgreKeys: (PostgreStringKeys|PostgreNumberKeys)[] = [
 export default class PostgreConfig extends Config<PostgreStringKeys, PostgreNumberKeys, never> {
     constructor(pgCfgName: string) {
         super(pgCfgName, postgreKeys)
+    }
+
+    public getAllVars() {
+        return {
+            PG_HOST: this.GET_CONFIG_STRING("PG_HOST"),
+            PG_USER: this.GET_CONFIG_STRING("PG_USER"),
+            PG_PASSWORD: this.GET_CONFIG_STRING("PG_PASSWORD"),
+            PG_DATABASE: this.GET_CONFIG_STRING("PG_DATABASE"),
+            PG_PORT: this.GET_CONFIG_NUMBER("PG_PORT"),
+            PG_MAX_POOL: this.GET_CONFIG_NUMBER("PG_MAX_POOL")
+        }
     }
 }
