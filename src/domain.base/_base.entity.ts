@@ -1,29 +1,31 @@
-// interface SetEntityProperties<
-//     TStringPropNames extends string,
-//     TNumberPropNames extends string,
-//     TBooleanPropNames extends string
-// > {
-//     SET_PRIMARY_ID(idValue: string): this
-//     SET_PROP_STRING(propName: TStringPropNames, propValue: string): this
-//     SET_PROP_NUMBER(propName: TNumberPropNames, propValue: number): this
-//     SET_PROP_BOOLEAN(propName: TBooleanPropNames, propValue: boolean): this
-// }
+/** 
+interface SetEntityProperties<
+    TStringPropNames extends string,
+    TNumberPropNames extends string,
+    TBooleanPropNames extends string
+> {
+    SET_PRIMARY_ID(idValue: string): this
+    SET_PROP_STRING(propName: TStringPropNames, propValue: string): this
+    SET_PROP_NUMBER(propName: TNumberPropNames, propValue: number): this
+    SET_PROP_BOOLEAN(propName: TBooleanPropNames, propValue: boolean): this
+}
 
-// interface GetEntityProperties<
-//     TStringPropNames extends string,
-//     TNumberPropNames extends string,
-//     TBooleanPropNames extends string
-// > {
-//     GET_PRIMARY_ID(): string
-//     GET_PROP_STRING(propName: TStringPropNames): string
-//     GET_PROP_NUMBER(propName: TNumberPropNames): number
-//     GET_PROP_BOOLEAN(propName: TBooleanPropNames): boolean
-//     GET_DTO(): [TStringPropNames | TNumberPropNames | TBooleanPropNames, string | number | boolean][]
-// }
+interface GetEntityProperties<
+    TStringPropNames extends string,
+    TNumberPropNames extends string,
+    TBooleanPropNames extends string
+> {
+    GET_PRIMARY_ID(): string
+    GET_PROP_STRING(propName: TStringPropNames): string
+    GET_PROP_NUMBER(propName: TNumberPropNames): number
+    GET_PROP_BOOLEAN(propName: TBooleanPropNames): boolean
+    GET_DTO(): [TStringPropNames | TNumberPropNames | TBooleanPropNames, string | number | boolean][]
+}
 
-// interface EntityProceduralEnforcement {
-//     FINISH_WITH_PROCEDURAL_ENFORCEMENT(): void
-// }
+interface EntityProceduralEnforcement {
+    FINISH_WITH_PROCEDURAL_ENFORCEMENT(): void
+}
+*/
 
 type ValueType = 'string' | 'number' | 'boolean'
 type IsUsed = boolean
@@ -40,20 +42,22 @@ export default class Entity
         TStringPropNames extends string,
         TNumberPropNames extends string,
         TBooleanPropNames extends string
-    > 
-    // implements
-    // SetEntityProperties<
-    //     TStringPropNames,
-    //     TNumberPropNames,
-    //     TBooleanPropNames
-    // >,
-    // GetEntityProperties<
-    //     TStringPropNames,
-    //     TNumberPropNames,
-    //     TBooleanPropNames
-    // >,
-    // EntityProceduralEnforcement 
-    {
+    >
+/** 
+implements
+SetEntityProperties<
+    TStringPropNames,
+    TNumberPropNames,
+    TBooleanPropNames
+>,
+GetEntityProperties<
+    TStringPropNames,
+    TNumberPropNames,
+    TBooleanPropNames
+>,
+EntityProceduralEnforcement 
+*/
+{
     private readonly properties: [TStringPropNames | TNumberPropNames | TBooleanPropNames, ...PropertyDetails][] = []
 
     private readonly entityName: string
